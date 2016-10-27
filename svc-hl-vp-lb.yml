@@ -1,0 +1,49 @@
+# Kubernetes Manifest file to create a Hyperledger Non-Validating Peer Loadbalancer Service
+# Date : 25-10-2016
+# Version 0.2
+# Author : James Buckett (james.buckett@au1.ibm.com)
+# Commissioned by ANZ Bank under direction of Ben Smillie (Ben.Smillie@anz.com)
+
+apiVersion: v1
+kind: Service
+
+metadata:
+  # Hyperledger Validating Peer Load Balancer Service Definition
+  name: svc-hl-vp-lb
+  namespace: hyperledger-06
+  labels:
+    tier: validating-peer
+    
+spec:
+  type: LoadBalancer
+
+  ports:
+    # 7051: Peer service listening port
+  - name: peer-service
+    port: 7051
+    targetPort: 7051
+    protocol: TCP
+
+    # 7052: CLI process use it for callbacks from chain code
+  - name: cli-callback
+    port: 7052
+    targetPort: 7052
+    protocol: TCP
+
+    # 7053: Event service on validating node
+  - name: event-service 
+    port: 7073
+    targetPort: 7053
+    protocol: TCP
+
+    # 7050: REST service listening port
+  - name: rest-service 
+    port: 7050
+    targetPort: 7050
+    protocol: TCP
+
+  # Like the selector in the replication controller,
+  # but this time it identifies the set of Hyperledger 
+  # pods to load balance traffic to.
+  selector:
+    tier: validating-peer
