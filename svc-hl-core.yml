@@ -1,0 +1,22 @@
+# Kubernetes Manifest file to create a Hyperledger core-vm-endpoint service
+# Date : 28-10-2016
+# Version 0.2
+# Author : James Buckett (james.buckett@au1.ibm.com)
+# Commissioned by ANZ Bank under direction of Ben Smillie (Ben.Smillie@anz.com)
+
+apiVersion: v1
+kind: Service
+
+metadata:
+  # Hyperledger Validating Peer Service Definition 
+  name: svc-core-vm-endpoint
+  namespace: hyperledger-06
+
+spec:
+
+  ports:
+    # 2375: Docker Listening Port
+    - name : docker-port
+      port: 2375
+      targetPort: 2375
+      protocol: TCP

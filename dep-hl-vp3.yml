@@ -1,0 +1,133 @@
+# Kubernetes Manifest file to create a Hyperledger Validating Peer - vp3
+# Date : 28-10-2016
+# Version 0.2
+# Author : James Buckett (james.buckett@au1.ibm.com)
+# Commissioned by ANZ Bank under direction of Ben Smillie (Ben.Smillie@anz.com)
+
+apiVersion: extensions/v1beta1
+kind: Deployment
+
+metadata:
+  name: dep-pod-hl-vp3
+  namespace: hyperledger-06
+    
+  labels:
+    # Label of this Deployment Pod
+    app: hl-vp3
+    city: hongkong
+    
+# Replica Specifications
+spec:
+  # One copy of the fabric in case of consistency issues
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hl-vp3
+      city: hongkong
+      
+  template:
+    metadata:
+      labels:
+        app: hl-vp3
+        tier: validating-peer
+        version: "0.6"
+        environment: development
+        provider: gke
+        node: "node-vp3"
+        city: "hongkong"
+        
+    # Container Specifications
+    spec:
+      containers:
+      - name: vp3
+        
+        # Fabric Peer docker image for Hyperledger Project
+        # https://github.com/hyperledger/fabric
+        # image: hyperledger/fabric-peer:latest
+        image: jackyhuang/fabric-peer:latest
+        imagePullPolicy: Always
+      
+        # Readiness Check
+        # Due to size of Hyperledger images allow some time for image download
+        # The readiness probe will not be called until 60 seconds after the all containers in the pod are created.
+        # The readiness probe must respond within the 5 second timeout.
+        readinessProbe:
+          httpGet:
+            # Ready Check via REST interface to /chain
+            path: "/chain"
+            port: 7050
+          initialDelaySeconds: 60
+          timeoutSeconds: 5
+        
+        # Start as peer node
+        command:
+          - "peer"
+        args:
+          - "node"
+          - "start"
+        
+        # Environment
+        env:
+          # Set this validating node - vp3
+          - name: CORE_PEER_ID
+            value: "vp3"
+          # Root Node Service Location
+          - name: CORE_PEER_DISCOVERY_ROOTNODE
+            # value: "svc-hl-vp0.default.svc.cluster.local:7051"
+            value: "svc-hl-vp0.hyperledger-06.svc.cluster.local:7051"
+          - name: CORE_PEER_ADDRESSAUTODETECT
+            value: "false"
+          # Service name for the vp3
+          - name: CORE_PEER_ADDRESS
+            # value: "svc-hl-vp3.default.svc.cluster.local:7051"
+            value: "svc-hl-vp3.hyperledger-06.svc.cluster.local:7051"
+          - name: CORE_PEER_NETWORKID
+            value: "dev"
+          - name: CORE_LOGGING_LEVEL
+            # value: "debug"
+            value: chaincode=debug:vm=debug:main=info
+            # Enable pbft consensus
+          - name: CORE_PEER_VALIDATOR_CONSENSUS_PLUGIN
+            value: "pbft"
+          - name: CORE_PBFT_GENERAL_MODE
+            value: "batch"
+          - name: CORE_PBFT_GENERAL_BATCHSIZE
+            value: "2"
+            # Four nodes minimum for pbft protocol
+          - name: CORE_PBFT_GENERAL_N
+            value: "4"
+          - name: CORE_PBFT_GENERAL_TIMEOUT_REQUEST
+            value: "10s"
+          - name: CORE_CHAINCODE_STARTUPTIMEOUT
+            value: "10000"
+          - name: CORE_CHAINCODE_DEPLOYTIMEOUT
+            value: "120000"
+            # Location for Chain Code Docker Engine
+            # Change this value to match your environment
+          - name: CORE_VM_ENDPOINT
+            value: "http://svc-core-vm-endpoint:2375"
+        
+        # Health Check
+        livenessProbe:
+          httpGet:
+            # Health Check via REST interface to /chain
+            path: "/chain"
+            port: 7050
+          initialDelaySeconds: 30
+          timeoutSeconds: 1
+        
+        # Communication Ports
+        ports:
+          # Peer service listening port
+          - containerPort: 7051
+          # CLI process use it for callbacks from chain code
+          - containerPort: 7052
+          # Event service on validating node
+          - containerPort: 7053
+          # REST service listening port
+          - containerPort: 7050
+          
+      # Assign this pod to node-vp3 for node resilence
+      nodeSelector:
+        node: node-vp3
+        city: hongkong
