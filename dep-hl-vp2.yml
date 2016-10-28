@@ -130,4 +130,4 @@ spec:
       # Assign this pod to node-vp2 for node resilence
       nodeSelector:
         node: node-vp2
-        city: singapore
+        # city: singapore
