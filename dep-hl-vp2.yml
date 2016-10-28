@@ -14,7 +14,7 @@ metadata:
   labels:
     # Label of this Deployment Pod
     app: hl-vp2
-    city: singapore
+    # city: singapore
     
 # Replica Specifications
 spec:
