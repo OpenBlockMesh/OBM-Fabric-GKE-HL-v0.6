@@ -1,6 +1,6 @@
 # Host update script to create a "core-vm-endpoint" hosts file
 # Date : 28-10-2016
-# Version 0.2
+# Version 0.3
 # Author : Jacky Huang
 # Commissioned by ANZ Bank under direction of Ben Smillie (Ben.Smillie@anz.com)
 
