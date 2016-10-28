@@ -34,7 +34,7 @@ spec:
         environment: development
         provider: gke
         node: "node-vp3"
-        city: "hongkong"
+        # city: "hongkong"
         
     # Container Specifications
     spec:
@@ -130,4 +130,4 @@ spec:
       # Assign this pod to node-vp3 for node resilence
       nodeSelector:
         node: node-vp3
-        city: hongkong
+        # city: hongkong
