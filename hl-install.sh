@@ -1,6 +1,6 @@
 # Kubernetes Install Script to create a Hyperledger Fabric
 # Date : 28-10-2016
-# Version 0.1
+# Version 0.3
 # Author : James Buckett (james.buckett@au1.ibm.com)
 # Commissioned by ANZ Bank under direction of Ben Smillie (Ben.Smillie@anz.com)
 
