@@ -1,3 +1,5 @@
+Misc
+
 kubectl get pods,ds,rs,rc,svc --all-namespaces -o wide
 
 alias kube-all='kubectl get pods,rc,rs,svc -n hyperledger-06'
