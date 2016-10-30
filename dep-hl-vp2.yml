@@ -6,7 +6,8 @@
 
 apiVersion: extensions/v1beta1
 kind: Deployment
-#
+# A Deployment provides declarative updates for Pods and Replica Sets (the next-generation Replication Controller). 
+
 metadata:
   name: dep-pod-hl-vp2
   namespace: hyperledger-06
