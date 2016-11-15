@@ -35,7 +35,7 @@ spec:
         environment: development
         provider: gke
         node: "node-vp3"
-        # city: "hongkong"
+        city: "hongkong"
         
     # Container Specifications
     spec:
