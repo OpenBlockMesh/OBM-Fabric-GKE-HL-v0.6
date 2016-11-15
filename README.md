@@ -159,7 +159,6 @@ Copy the value it should be similar to this:
 Install gcloud on the linux system you wish to access your cluster from.
 * `sudo apt-get -y install python`
 * `wget https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-131.0.0-linux-x86_64.tar.gz`
-* `sudo apt-get -y install python`
 * `tar -zxvf google-cloud-sdk-131.0.0-linux-x86_64.tar.gz`
 * `cd google-cloud-sdk`
 * .`/install.sh`
@@ -169,9 +168,9 @@ Logout and login for profile changes to take effect.
 Setup gcloud : 
 * `gcloud auth login`
 * Enter the verification code
-* `gcloud beta auth application-default login`
 * `gcloud components install kubectl`
 * `gcloud container clusters get-credentials hyperledger-cluster --zone asia-east1-a --project hyperledger-xxxxxx`
+* `gcloud beta auth application-default login`
 
 Once kubectl is installed use this command to get a list of your nodes `kubectl get nodes`
 
@@ -250,7 +249,7 @@ deb https://apt.dockerproject.org/repo ubuntu-xenial main
 sudo apt-get update
 sudo apt-get install linux-image-extra-$(uname -r) linux-image-extra-virtual -y
 shutdown -r 0
-sudo apt-get install docker
+sudo apt-get install docker-engine
 systemctl stop docker
 ```
 
